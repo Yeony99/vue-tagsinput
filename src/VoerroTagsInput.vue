@@ -269,6 +269,11 @@ export default {
             type: Function,
             default: () => true
         },
+
+        startsWithInput: {
+          type: Boolean,
+          default: false
+        }
     },
 
     data() {
@@ -622,8 +627,15 @@ export default {
                     : tag[this.textField].toLowerCase();
                 const ids = this.searchResults.map((res) => (res[this.idField]));
 
-                if (compareable.search(searchQuery) > -1 && ! this.tagSelected(tag) && ! ids.includes(tag[this.idField])) {
-                    this.searchResults.push(tag);
+                // Show Search results starting with the searchQuery
+                if(this.startsWithInput) {
+                    if (compareable.startsWith(searchQuery) && ! this.tagSelected(tag) && ! ids.includes(tag[this.idField])) {
+                      this.searchResults.push(tag);
+                    }
+                } else {
+                    if (compareable.search(searchQuery) > -1 && ! this.tagSelected(tag) && ! ids.includes(tag[this.idField])) {
+                      this.searchResults.push(tag);
+                    }
                 }
             }
 
